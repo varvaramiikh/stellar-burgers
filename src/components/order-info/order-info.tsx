@@ -1,61 +1,85 @@
-import { FC, useMemo } from 'react';
-import { Preloader } from '../ui/preloader';
+import { FC, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { Preloader } from '@ui';
 import { OrderInfoUI } from '../ui/order-info';
+
 import { TIngredient } from '@utils-types';
 
+import { useDispatch, useSelector } from '../../services/store';
+import { selectIngredients } from '../../slices/ingredientsSlice';
+
+import {
+  getOrderByNumber,
+  selectFeedOrders,
+  selectSelectedOrder
+} from '../../slices/feedSlice';
+
+import { selectProfileOrders } from '../../slices/profileOrdersSlice';
+
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams();
+  const dispatch = useDispatch();
 
-  const ingredients: TIngredient[] = [];
+  const feedOrders = useSelector(selectFeedOrders);
+  const profileOrders = useSelector(selectProfileOrders);
+  const selectedOrder = useSelector(selectSelectedOrder);
+  const ingredients = useSelector(selectIngredients);
 
-  /* Готовим данные для отображения */
+  const orderFromFeed = feedOrders.find(
+    (order) => order.number === Number(number)
+  );
+
+  const orderFromProfile = profileOrders.find(
+    (order) => order.number === Number(number)
+  );
+
+  const orderData = orderFromFeed || orderFromProfile || selectedOrder;
+
+  useEffect(() => {
+    if (!orderFromFeed && !orderFromProfile && number) {
+      dispatch(getOrderByNumber(Number(number)));
+    }
+  }, [dispatch, number, orderFromFeed, orderFromProfile]);
+
   const orderInfo = useMemo(() => {
-    if (!orderData || !ingredients.length) return null;
+    if (!orderData || !ingredients.length) {
+      return null;
+    }
 
-    const date = new Date(orderData.createdAt);
-
-    type TIngredientsWithCount = {
+    const ingredientsInfo: {
       [key: string]: TIngredient & { count: number };
-    };
+    } = {};
 
-    const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, item) => {
-        if (!acc[item]) {
-          const ingredient = ingredients.find((ing) => ing._id === item);
-          if (ingredient) {
-            acc[item] = {
-              ...ingredient,
-              count: 1
-            };
-          }
-        } else {
-          acc[item].count++;
-        }
+    orderData.ingredients.forEach((id) => {
+      const ingredient = ingredients.find((item) => item._id === id);
 
-        return acc;
-      },
-      {}
-    );
+      if (!ingredient) {
+        return;
+      }
+
+      if (ingredientsInfo[id]) {
+        ingredientsInfo[id].count += 1;
+      } else {
+        ingredientsInfo[id] = {
+          ...ingredient,
+          count: 1
+        };
+      }
+    });
 
     const total = Object.values(ingredientsInfo).reduce(
-      (acc, item) => acc + item.price * item.count,
+      (sum, ingredient) => sum + ingredient.price * ingredient.count,
       0
     );
+
+    const date = new Date(orderData.createdAt);
 
     return {
       ...orderData,
       ingredientsInfo,
-      date,
-      total
+      total,
+      date
     };
   }, [orderData, ingredients]);
 
