@@ -9,7 +9,7 @@ import {
   selectProfileOrders,
   selectProfileOrdersError,
   selectProfileOrdersLoading
-} from '../../slices/profileOrdersSlice';
+} from '../../services/profileOrdersSlice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();

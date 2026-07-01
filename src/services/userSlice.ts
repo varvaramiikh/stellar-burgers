@@ -9,7 +9,7 @@ import {
   TRegisterData
 } from '@api';
 import { TUser } from '@utils-types';
-import { deleteCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 
 type TUserState = {
   user: TUser | null;
@@ -27,8 +27,15 @@ const initialState: TUserState = {
   error: null
 };
 
-export const checkUserAuth = createAsyncThunk('user/checkUserAuth', async () =>
-  getUserApi()
+export const checkUserAuth = createAsyncThunk(
+  'user/checkUserAuth',
+  async () => {
+    if (!getCookie('accessToken')) {
+      return Promise.reject();
+    }
+
+    return getUserApi();
+  }
 );
 
 export const loginUser = createAsyncThunk(

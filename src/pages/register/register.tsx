@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { RegisterUI } from '@ui-pages';
 
 import { useDispatch, useSelector } from '../../services/store';
-import { registerUser, selectUserError } from '../../slices/userSlice';
+import { registerUser, selectUserError } from '../../services/userSlice';
 
 export const Register: FC = () => {
   const dispatch = useDispatch();

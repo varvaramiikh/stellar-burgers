@@ -16,7 +16,19 @@ const initialState: TOrderState = {
 
 export const createOrder = createAsyncThunk(
   'order/createOrder',
-  async (ingredients: string[]) => orderBurgerApi(ingredients)
+  async (ingredients: string[]): Promise<TOrder> => {
+    const data = await orderBurgerApi(ingredients);
+
+    return {
+      _id: data.order._id,
+      status: data.order.status,
+      name: data.order.name,
+      createdAt: data.order.createdAt,
+      updatedAt: data.order.updatedAt,
+      number: data.order.number,
+      ingredients
+    };
+  }
 );
 
 const orderSlice = createSlice({
@@ -40,7 +52,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.orderModalData = action.payload.order as unknown as TOrder;
+        state.orderModalData = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;

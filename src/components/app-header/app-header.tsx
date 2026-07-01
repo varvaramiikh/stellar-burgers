@@ -11,7 +11,7 @@ import {
 import styles from '../ui/app-header/app-header.module.css';
 
 import { useSelector } from '../../services/store';
-import { selectUser } from '../../slices/userSlice';
+import { selectUser } from '../../services/userSlice';
 
 export const AppHeader: FC = () => {
   const { pathname } = useLocation();

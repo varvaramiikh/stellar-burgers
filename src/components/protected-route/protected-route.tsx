@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import { useSelector } from '../../services/store';
-import { selectIsAuthenticated } from '../../slices/userSlice';
+import { selectIsAuthenticated } from '../../services/userSlice';
 
 type ProtectedRouteProps = {
   children: ReactElement;

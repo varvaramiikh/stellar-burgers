@@ -6,7 +6,7 @@ import {
   selectUser,
   selectUserError,
   updateUser
-} from '../../slices/userSlice';
+} from '../../services/userSlice';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();

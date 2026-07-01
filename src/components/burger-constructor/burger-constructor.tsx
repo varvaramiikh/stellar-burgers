@@ -9,16 +9,16 @@ import { useDispatch, useSelector } from '../../services/store';
 import {
   clearConstructor,
   selectConstructorItems
-} from '../../slices/burgerConstructorSlice';
+} from '../../services/burgerConstructorSlice';
 
-import { selectIsAuthenticated } from '../../slices/userSlice';
+import { selectIsAuthenticated } from '../../services/userSlice';
 
 import {
   clearOrderModalData,
   createOrder,
   selectOrderModalData,
   selectOrderRequest
-} from '../../slices/orderSlice';
+} from '../../services/orderSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

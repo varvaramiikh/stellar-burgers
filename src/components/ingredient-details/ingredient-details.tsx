@@ -5,7 +5,7 @@ import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
 
 import { useSelector } from '../../services/store';
-import { selectIngredients } from '../../slices/ingredientsSlice';
+import { selectIngredients } from '../../services/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();

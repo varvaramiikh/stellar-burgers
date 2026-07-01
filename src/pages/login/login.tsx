@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { LoginUI } from '@ui-pages';
 
 import { useDispatch, useSelector } from '../../services/store';
-import { loginUser, selectUserError } from '../../slices/userSlice';
+import { loginUser, selectUserError } from '../../services/userSlice';
 
 export const Login: FC = () => {
   const dispatch = useDispatch();

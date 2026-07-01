@@ -7,17 +7,21 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 
 import { useDispatch, useSelector } from '../../services/store';
-import { selectIngredients } from '../../slices/ingredientsSlice';
+import { selectIngredients } from '../../services/ingredientsSlice';
 
 import {
   getOrderByNumber,
   selectFeedOrders,
   selectSelectedOrder
-} from '../../slices/feedSlice';
+} from '../../services/feedSlice';
 
-import { selectProfileOrders } from '../../slices/profileOrdersSlice';
+import { selectProfileOrders } from '../../services/profileOrdersSlice';
 
-export const OrderInfo: FC = () => {
+type TOrderInfoProps = {
+  isModal?: boolean;
+};
+
+export const OrderInfo: FC<TOrderInfoProps> = ({ isModal = false }) => {
   const { number } = useParams();
   const dispatch = useDispatch();
 
@@ -87,5 +91,15 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return (
+    <>
+      {!isModal && (
+        <p className='text text_type_digits-default mb-10'>
+          #{orderInfo.number}
+        </p>
+      )}
+
+      <OrderInfoUI orderInfo={orderInfo} />
+    </>
+  );
 };
